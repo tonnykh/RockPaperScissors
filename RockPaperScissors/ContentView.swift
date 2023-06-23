@@ -8,14 +8,72 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    let possibleMoves: [String] = [
+        "👊", "✋", "✌️"
+    ]
+    
+    @State var playerChoice: String = ""
+    @State var showAlert: Bool = false
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+        ZStack {
+            VStack {
+                Spacer()
+                
+                Text("Rock, Paper, Scissors!")
+                    .font(.title.bold())
+                
+                Spacer()
+                Spacer()
+
+                VStack {
+                    Text("Choose your move")
+                        .font(.title2.weight(.medium))
+                    
+                    HStack {
+                        ForEach(possibleMoves, id: \.self) { move in
+                            ZStack {
+                                Circle()                                                .frame(width: 80, height: 80)
+                                Text(move)
+                                    .font(.largeTitle)
+                                    .padding()
+                            }
+                            .onTapGesture {
+                                playerChoice = move
+                                emojiTapped()
+                            }
+                        }
+                    }
+                }
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(.secondary)
+                .cornerRadius(10)
+                .padding(.horizontal)
+                
+                Spacer()
+                Spacer()
+
+                Text("Score: 0")
+                    .font(.title.bold())
+                
+                Spacer()
+                Spacer()
+            }
         }
-        .padding()
+        .ignoresSafeArea()
+        .alert("You WIN!", isPresented: $showAlert) {
+            Button("Next") {}
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("PC: ✋, You: \(playerChoice)")
+                .font(.headline)
+        }
+    }
+    
+    func emojiTapped() {
+        showAlert = true
     }
 }
 
